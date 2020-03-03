@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 #CSV files
-EXTR_LookUp.csv
-EXTR_Parcel.csv
-EXTR_ResBldg.csv
-EXTR_RPSale.csv
+data/EXTR_LookUp.csv
+data/EXTR_Parcel.csv
+data/EXTR_ResBldg.csv
+data/EXTR_RPSale.csv
