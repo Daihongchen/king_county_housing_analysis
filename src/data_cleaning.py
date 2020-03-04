@@ -26,10 +26,5 @@ def create_dfs(csv1, csv2, csv3, csv4):
 
 def sales_2019(df_in):
     df = df_in
-    df['datetime'] = pd.to_datetime(df['DocumentDate'])
-    yr2020 = datetime.date(2020, 1, 1)
-    yr2018 = datetime.date(2018, 12, 31)
-    df = df[df['datetime'] > yr2018]
-    df = df[df['datetime'] < yr2020]
-            
+    df = df[df['DocumentDate'].str.contains('2019') == True]
     return df
