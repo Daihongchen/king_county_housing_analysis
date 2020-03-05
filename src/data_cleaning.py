@@ -55,7 +55,7 @@ def clean_parcel(df_in):
     df = df_in
     
     #create new column for whether or not house is on waterfront property
-    df['waterfront'] = df['WfntLocation'] > 0
+    df['waterfront'] = (df['WfntLocation'] > 0).astype(int)
     
     # new column for whether or not there are power lines
     df['pwrlines'] = df['PowerLines'] == 'Y'
@@ -75,6 +75,14 @@ def clean_parcel(df_in):
     df['nuisance'] = (df['nuisance_total'] > 0).astype(int)
     
     return df
+
+def clean_master(df_master):
+    df_master = df_master[df_master['SalePrice'] > 50000]
+    #df_master = df_master[df_master['SalePrice'] < 1000000]
+    df_master = df_master[df_master['PropertyType'] == 11]
+    df_master = df_master[df_master['SqFtTotLiving'] < 8000]
+    
+    return df_master
 
 # add Major and Minor columns of the df to create HID column - used for joining tables
 def add_hid(df_in):
