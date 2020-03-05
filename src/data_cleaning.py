@@ -14,6 +14,7 @@ import statsmodels.formula.api as smf
 from statsmodels.stats.diagnostic import linear_rainbow, het_breuschpagan
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
+
 # initiate dfs from csv files
 def create_dfs(csv1, csv2, csv3, csv4):
     relative_filename = os.path.abspath(os.path.join(os.pardir, 'data', csv1))
@@ -78,9 +79,7 @@ def clean_parcel(df_in):
 
 def clean_master(df_master):
     df_master = df_master[df_master['SalePrice'] > 50000]
-    #df_master = df_master[df_master['SalePrice'] < 1000000]
     df_master = df_master[df_master['PropertyType'] == 11]
-    df_master = df_master[df_master['SqFtTotLiving'] < 8000]
     
     return df_master
 
@@ -111,10 +110,12 @@ def create_model(dependent, features, df_master):
     
     return df_model, model
 
-def test_linearity():
-    pass
+def linearity_check(model):
 
-def test_normality():
+    rainbow_statistic, rainbow_p_value = linear_rainbow(model)
+    
+    print("Rainbow statistic:", rainbow_statistic)
+    print("Rainbow p-value:", rainbow_p_value)
     pass
 
 def vif_test(df_model, features):
@@ -126,6 +127,3 @@ def vif_test(df_model, features):
     vif_df["feature"] = features
 
     return vif_df
-
-def generate_and_test_model():
-    pass
