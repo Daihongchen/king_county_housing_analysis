@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import datetime
 
+# initiate dfs from csv files
 def create_dfs(csv1, csv2, csv3, csv4):
     relative_filename = os.path.abspath(os.path.join(os.pardir, 'data', csv1))
     df1 = pd.read_csv(relative_filename)
@@ -24,7 +25,79 @@ def create_dfs(csv1, csv2, csv3, csv4):
     return df1, df2, df3, df4
 
 
-def sales_2019(df_in):
-    df = df_in
+# create sales df that only includes sales from 2019
+def sales_2019(df):
     df = df[df['DocumentDate'].str.contains('2019') == True]
+
     return df
+
+# clean and prep sales df for joining and analysis
+def clean_sales(df_in):
+    df = df_in
+    
+    #remove all columns that are not relevant for analysis
+    columns = ['Major', 'Minor', 'DocumentDate', 'SalePrice', 'PropertyType', 'HID']
+    df = df[columns]
+    
+    #remove all rows with sale value of $0
+    df = df[df['SalePrice'] > 0]
+    
+    return df
+
+# clean and prep parcel df for joining and analysis
+def clean_parcel(df_in):
+    df = df_in
+    
+    #create new column for whether or not house is on waterfront property
+    df['waterfront'] = df['WfntLocation'] > 0
+    
+    # new column for whether or not there are power lines
+    df['pwrlines'] = df['PowerLines'] == 'Y'
+
+    # new column for whether or not there is some other nusiance
+    df['othernuisance'] = df['OtherNuisances'] == 'Y'
+    
+    # new column for totalling all values from nuisance columns (booleans counted as 0 or 1)
+    df['nuisance_total'] = (
+        df['AirportNoise'] +
+        df['TrafficNoise'] +
+        df['pwrlines'] +
+        df['othernuisance']
+        )
+    
+    # new boolean column for whether or not property has any kind of nuisance present
+    df['nuisance_bool'] = (df['nuisance_total'] > 0).astype(int)
+    
+    return df
+
+# add Major and Minor columns of the df to create HID column - used for joining tables
+def add_hid(df_in):
+    df = df_in
+    df['HID'] = (df['Major'].astype(str)).str.zfill(6) + '-' + (df['Minor'].astype(str)).str.zfill(4)
+    
+    return df
+    
+# join all dataframes on the HID column
+def join_dfs(df1, df2, df3):
+    df_master = df1.merge(df2, how='inner', on='HID')
+    df_master = df_master.merge(df3, how='inner', on='HID')
+    
+    return df_master
+
+def create_model():
+    pass
+
+def test_linearity():
+    pass
+
+def test_normality():
+    pass
+
+def test_independence():
+    pass
+
+def model_test():
+    pass
+
+def generate_and_test_model():
+    pass
