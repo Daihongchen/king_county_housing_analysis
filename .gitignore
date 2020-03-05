@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#CSV files
+data/EXTR_LookUp.csv
+data/EXTR_Parcel.csv
+data/EXTR_ResBldg.csv
+data/EXTR_RPSale.csv
