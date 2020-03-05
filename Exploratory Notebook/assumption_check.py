@@ -79,12 +79,13 @@ def homosdt_check_test(df, model):
 Thus returning a low p-value means that the current model violates the homoscedasticity assumption")
 
     
+
 def independence_check(df):
 
     rows = df.iloc[:, 1:].values
 
     vif_df = pd.DataFrame()
-    vif_df["VIF"] = [variance_inflation_factor(rows, i) for i in range(2)]
-    vif_df["feature"] = df.columns[1:]
+    vif_df["VIF"] = [variance_inflation_factor(rows, i) for i in range(len(df.columns)-1)]
+    vif_df["feature"] = list(df.columns[1:])
 
-    vif_df
+    return vif_df
