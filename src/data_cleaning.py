@@ -8,6 +8,12 @@ import numpy as np
 import pandas as pd
 import datetime
 
+import statsmodels.api as sm
+import statsmodels.stats.api as sms
+import statsmodels.formula.api as smf
+from statsmodels.stats.diagnostic import linear_rainbow, het_breuschpagan
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
 # initiate dfs from csv files
 def create_dfs(csv1, csv2, csv3, csv4):
     relative_filename = os.path.abspath(os.path.join(os.pardir, 'data', csv1))
@@ -66,7 +72,7 @@ def clean_parcel(df_in):
         )
     
     # new boolean column for whether or not property has any kind of nuisance present
-    df['nuisance_bool'] = (df['nuisance_total'] > 0).astype(int)
+    df['nuisance'] = (df['nuisance_total'] > 0).astype(int)
     
     return df
 
@@ -84,8 +90,18 @@ def join_dfs(df1, df2, df3):
     
     return df_master
 
-def create_model():
-    pass
+def create_model(dependent, features, df_master):
+    
+    desired_cols = dependent + features
+    df_model = df_master[desired_cols].copy()
+    df_model.dropna(inplace=True)
+
+    y = df_model[dependent]
+    x = df_model[features]
+
+    model = sm.OLS(y, sm.add_constant(x)).fit()
+    
+    return df_model, model
 
 def test_linearity():
     pass
@@ -93,11 +109,15 @@ def test_linearity():
 def test_normality():
     pass
 
-def test_independence():
-    pass
+def vif_test(df_model, features):
+    
+    rows = df_model[features].values
 
-def model_test():
-    pass
+    vif_df = pd.DataFrame()
+    vif_df["VIF"] = [variance_inflation_factor(rows, i) for i in range(len(features))]
+    vif_df["feature"] = features
+
+    return vif_df
 
 def generate_and_test_model():
     pass
