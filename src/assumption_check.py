@@ -12,7 +12,11 @@ from statsmodels.formula.api import ols
 from statsmodels.stats.diagnostic import linear_rainbow, het_breuschpagan
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-from sklearn.preprocessing import LabelEncoder 
+import os
+import sys
+module_path = os.path.abspath(os.path.join(os.pardir))
+if module_path not in sys.path:
+    sys.path.append(module_path)
 
 
 def correlation_fig(df):
@@ -30,7 +34,9 @@ def create_df(df, columns):
 
 def create_model(df):
     df.dropna(inplace=True)
-    model = ols(formula="df.iloc[:, 0] ~ df.iloc[:, 1:]", data = df).fit()
+    y = df.iloc[:, 0]
+    X = df.iloc[:, 1:]
+    model = ols(formula="y ~ X", data = df).fit()
     return model
 
 
@@ -50,7 +56,7 @@ def linearity_check(model):
 alternative hypothesis is that it is not. Thus returning a low p-value means that the current model violates the linearity assumption.")
 
 
-def normality_check():
+def normality_check(model):
     print(f"The Jarque-Bera test is performed automatically as part of the model summary output, labeled Jarque-Bera (JB) and Prob(JB).\
     \n\nThe null hypothesis is that the residuals are normally distributed, alternative hypothesis is that they are not. \
 Thus returning a low p-value means that the current model violates the normality assumption.")
@@ -80,6 +86,7 @@ Thus returning a low p-value means that the current model violates the homosceda
 
     
 
+
 def independence_check(df):
 
     rows = df.iloc[:, 1:].values
@@ -88,4 +95,6 @@ def independence_check(df):
     vif_df["VIF"] = [variance_inflation_factor(rows, i) for i in range(len(df.columns)-1)]
     vif_df["feature"] = list(df.columns[1:])
 
-    return vif_df
+    print(vif_df) 
+    print("\n")
+    print("VIF needs to be smaller than 5.")
