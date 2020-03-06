@@ -61,6 +61,19 @@ The presence of a nuisance, of some kind, when run through linear regression by 
 
 ## Final Model
 
+Our final model ultimately included Total Square Feet, Lake Washington View Quality, Waterfront Property, Square footage of Garage, and Square Footage of the Porch. 
+
+The reason we included porch size is because in the cases where there WAS a porch, the coefficient was large, accounting for about 214 USD per square foot. 
+
+The coefficient for Lake Washington View Quality was also fairly large - 360,000 - which accounts for 360,000 USD per increase in quality gradient. 
+
+Waterfront property was also at a premium with a coefficient of 860,000, accounting for an 860,000 USD increase simply by being on the water. 
+
+Square Footage of the living space also greatly influenced sale price with a coefficient of 360, accounting for a 360 USD increase per square foot. 
+
+Finally, we added Garage Square Footage with a coefficient of -247, accounting for a decrease of 247 USD per square foot. We included this final item because we found it interesting that an increase in garage size account for a decrease in value. We interpreted this as indicating a premium value placed on actual living space in an area where living space is so expensive (i.e. people don't want a garage when they could have an extra room instead).
+
+Ultimately, we were able to account for 48.2% of the variance in housing prices, all while keeping the colinearity measurements under 2 for each feature in the model (anything under 5 is considered viable). z
 
 ## Hypothesis Conclusions
 Alpha: .05
@@ -77,10 +90,4 @@ Conclusion: We succeed in rejecting the Null Hypothesis. p_val = 0.00
 Null Hypothesis 4: Having a nuisance does not decrease sale price.
 Conclusion: We fail to reject the null hypothesis because the coefficient is in the positive direction. p_val = 0.00
 
-
-sq foot living
-sq foot garage
-lake washington
-is_waterfront
-sq foot porch vs is_porch 
-is_nusiance 
+## Assumption Tests
